@@ -109,7 +109,7 @@ app.post('/api/persons', (request, response) => {
 
   persons = persons.concat(person)
 
-  response.status(200).end()
+  response.json(person)
 })
 
 app.get('/info', (request, response) => {
