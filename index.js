@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 3001
 const app = express()
 
 app.use(express.json())
+app.use(express.static('build'))
 app.use(cors())
 
 const morganConfig = morgan(function (tokens, req, res) {
