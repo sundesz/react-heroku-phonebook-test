@@ -93,11 +93,18 @@ app.put('/api/persons/:id', (request, response, next) => {
     number: body.number,
   }
 
-  PhoneBook.findByIdAndUpdate(request.params.id, phone, {
-    runValidators: true,
-    new: true,
-    context: 'query',
-  })
+  PhoneBook.findByIdAndUpdate(
+    request.params.id,
+    phone,
+    {
+      runValidators: true,
+      new: true,
+      context: 'query',
+    },
+    (error) => {
+      return response.status(400).json({ error: error })
+    }
+  )
     .then((updatedPhone) => {
       if (updatedPhone) {
         response.json(updatedPhone)
