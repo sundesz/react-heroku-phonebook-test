@@ -34,10 +34,6 @@ const requestLogger = (request, response, next) => {
 
 app.use(requestLogger)
 
-const generateId = () => {
-  return Math.floor(Math.random() * 10000)
-}
-
 app.get('/', (request, response) => {
   response.send('<h1>Hello Sandesh</h1>')
 })
@@ -54,6 +50,7 @@ app.get('/api/persons/:id', (request, response) => {
       response.json(person)
     })
     .catch((error) => {
+      console.log(error)
       response.status(404).end()
     })
 })
@@ -116,10 +113,10 @@ app.put('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/info', (request, response) => {
-  const content = `Phonebook has info for ${
-    persons.length
-  } people <br><br> ${new Date().toString()}`
-  response.send(content)
+  PhoneBook.count().then((count) => {
+    const content = `Phonebook has info for ${count} people <br><br> ${new Date().toString()}`
+    response.send(content)
+  })
 })
 
 const unknownEndPoint = (request, response) => {
