@@ -5,7 +5,7 @@ GET https://sheltered-shelf-77221.herokuapp.com/api/persons
 
 
 ###
-DELETE http://localhost:3001/api/persons/2
+DELETE http://localhost:3001/api/persons/610e2382b779a22e64a6fec6
 
 
 
@@ -14,6 +14,17 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-  "name": "Sandesh Hyoju",
+  "name": "S",
   "number": "045-2177225"
+}
+
+
+
+###
+PUT http://localhost:3001/api/persons/610e4b1a2705255b89be7e75
+Content-Type: application/json
+
+{
+  "name": "Luniva Hyoju",
+  "number": "Lun"
 }
