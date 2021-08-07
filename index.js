@@ -1,8 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const PORT = process.env.PORT || 3001
 const app = express()
+const PhoneBook = require('./models/Phonebook')
 
 app.use(express.json())
 app.use(express.static('build'))
@@ -64,18 +66,19 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  PhoneBook.find({}).then((persons) => {
+    response.json(persons)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find((p) => p.id === id)
-
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  PhoneBook.findById(request.params.id)
+    .then((person) => {
+      response.json(person)
+    })
+    .catch((error) => {
+      response.status(404).end()
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -93,23 +96,27 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if (!body.name || !body.number) {
+  if (body.name === undefined || body.number === undefined) {
     return response.status(400).json({ error: 'name or number is missing' })
   }
 
-  if (persons.find((p) => p.name.toLowerCase() === body.name.toLowerCase())) {
-    return response.status(400).json({ error: 'name must be unique' })
-  }
+  // TODO look for lowercase
+  // PhoneBook.find({ name: body.name })
+  //   .then((result) => {
+  //     return response.status(400).json({ error: 'name must be unique' })
+  //   })
+  //   .catch((error) => {
+  //     console.log(error.message)
+  //   })
 
-  const person = {
-    id: generateId(),
+  const person = new PhoneBook({
     name: body.name,
     number: body.number,
-  }
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
+  person.save().then((savedPerson) => {
+    response.json(savedPerson)
+  })
 })
 
 app.get('/info', (request, response) => {
