@@ -90,20 +90,14 @@ app.put('/api/persons/:id', (request, response, next) => {
     number: body.number,
   }
 
-  PhoneBook.findByIdAndUpdate(
-    request.params.id,
-    phone,
-    {
-      runValidators: true,
-      new: true,
-      context: 'query',
-    },
-    (error) => {
-      return response.status(400).json({ error: error })
-    }
-  )
+  PhoneBook.findByIdAndUpdate(request.params.id, phone, {
+    runValidators: true,
+    new: true,
+    context: 'query',
+  })
     .then((updatedPhone) => {
       if (updatedPhone) {
+        console.log('update', updatedPhone)
         response.json(updatedPhone)
       } else {
         response.status(400).json({ error: 'Person not found' })
@@ -120,6 +114,7 @@ app.get('/info', (request, response) => {
 })
 
 const unknownEndPoint = (request, response) => {
+  console.log(request.body)
   response.status(404).send({ error: 'unknown endpoint' })
 }
 app.use(unknownEndPoint)
