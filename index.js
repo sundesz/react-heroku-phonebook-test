@@ -96,6 +96,7 @@ app.put('/api/persons/:id', (request, response, next) => {
   PhoneBook.findByIdAndUpdate(request.params.id, phone, {
     runValidators: true,
     new: true,
+    context: 'query',
   })
     .then((updatedPhone) => {
       if (updatedPhone) {
@@ -120,7 +121,7 @@ const unknownEndPoint = (request, response) => {
 app.use(unknownEndPoint)
 
 const errorHandler = (error, request, response, next) => {
-  console.log(error)
+  // console.log(error)
 
   switch (error.name.toLowerCase()) {
     case 'casterror':
